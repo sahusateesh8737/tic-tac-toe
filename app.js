@@ -86,6 +86,8 @@ const checkWinner = () => {
     }
   }
 };
+var sound =new Audio();
+sound.src = "sound2.mp3"
 
 newGameBtn.addEventListener("click", resetGame);
 resetBtn.addEventListener("click", resetGame);
