@@ -1,5 +1,5 @@
 * {
-    margin: 100;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -104,11 +104,11 @@ background-color: rgb(255, 255, 255);
 
 /* Navbar styles */
 .navbar {
-    background-color: #333;
+    background-color: #000000;
     color: white;
     padding: 1rem;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
 }
 
