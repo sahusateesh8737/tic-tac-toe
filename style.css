@@ -22,6 +22,18 @@ body {
     }
 }
 
+.celebrate {
+  animation: celebrate 1s ease-in-out infinite;
+}
+
+@keyframes celebrate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
 
 .container {
     height: 70vh;

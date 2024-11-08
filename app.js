@@ -18,76 +18,81 @@ const winPatterns = [
   [6, 7, 8],
 ];
 
+const winSound = new Audio('Winning.wav');
+
 const resetGame = () => {
   turnO = true;
   count = 0;
   enableBoxes();
   msgContainer.classList.add("hide");
+  boxes.forEach((box) => {
+    box.classList.remove("celebrate");
+  });
 };
 
-boxes.forEach((box) => {
-  box.addEventListener("click", () => {
-    if (turnO) {
-      //playerO
-      box.innerText = "O";
-      turnO = false;
-    } else {
-      //playerX
-      box.innerText = "X";
-      turnO = true;
+const checkWin = () => {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (
+      boxes[a].innerText &&
+      boxes[a].innerText === boxes[b].innerText &&
+      boxes[a].innerText === boxes[c].innerText
+    ) {
+      // Apply celebration animation to winning boxes
+      boxes[a].classList.add("celebrate");
+      boxes[b].classList.add("celebrate");
+      boxes[c].classList.add("celebrate");
+      msgContainer.classList.remove("hide");
+      msg.innerText = `${boxes[a].innerText} Wins!`;
+      disableBoxes();
+      winSound.play(); // Play winning sound
+      return true;
     }
-    box.disabled = true;
-    count++;
-
-    let isWinner = checkWinner();
-
-    if (count === 9 && !isWinner) {
-      gameDraw();
-    }
-  });
-});
-
-const gameDraw = () => {
-  msg.innerText = `Game was a Draw.`;
-  msgContainer.classList.remove("hide");
-  disableBoxes();
+  }
+  return false;
 };
 
 const disableBoxes = () => {
-  for (let box of boxes) {
-    box.disabled = true;
-  }
+  boxes.forEach((box) => {
+    box.removeEventListener("click", handleBoxClick);
+  });
 };
 
 const enableBoxes = () => {
-  for (let box of boxes) {
-    box.disabled = false;
+  boxes.forEach((box) => {
+    box.addEventListener("click", handleBoxClick);
+    box.classList.remove("celebrate");
     box.innerText = "";
+  });
+};
+
+const handleBoxClick = (event) => {
+  const box = event.target;
+  if (box.innerText !== "") return;
+
+  if (turnO) {
+    box.innerText = "O";
+  } else {
+    box.innerText = "X";
   }
-};
 
-const showWinner = (winner) => {
-  msg.innerText = `Congratulations, Winner is ${winner}`;
-  msgContainer.classList.remove("hide");
-  disableBoxes();
-};
+  count++;
+  if (checkWin()) return;
 
-const checkWinner = () => {
-  for (let pattern of winPatterns) {
-    let pos1Val = boxes[pattern[0]].innerText;
-    let pos2Val = boxes[pattern[1]].innerText;
-    let pos3Val = boxes[pattern[2]].innerText;
-
-    if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
-      if (pos1Val === pos2Val && pos2Val === pos3Val) {
-        showWinner(pos1Val);
-        return true;
-      }
-    }
+  if (count === 9) {
+    msgContainer.classList.remove("hide");
+    msg.innerText = "It's a Draw!";
   }
-};
-var sound =new Audio();
-sound.src = "sound2.mp3"
 
-newGameBtn.addEventListener("click", resetGame);
+  turnO = !turnO;
+};
+
+boxes.forEach((box) => {
+  box.addEventListener("click", handleBoxClick);
+});
+
 resetBtn.addEventListener("click", resetGame);
+newGameBtn.addEventListener("click", resetGame);
+
+var sound = new Audio();
+sound.src = "sound2.mp3";
