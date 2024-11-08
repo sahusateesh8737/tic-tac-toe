@@ -28,6 +28,8 @@ const resetGame = () => {
   boxes.forEach((box) => {
     box.classList.remove("celebrate");
   });
+  const lines = document.querySelectorAll(".line");
+  lines.forEach((line) => line.remove());
 };
 
 const checkWin = () => {
@@ -46,6 +48,7 @@ const checkWin = () => {
       msg.innerText = `${boxes[a].innerText} Wins!`;
       disableBoxes();
       winSound.play(); // Play winning sound
+      drawLine(pattern); // Draw the line
       return true;
     }
   }
@@ -69,6 +72,11 @@ const enableBoxes = () => {
 const handleBoxClick = (event) => {
   const box = event.target;
   if (box.innerText !== "") return;
+
+  // Add vibration effect
+  if (navigator.vibrate) {
+    navigator.vibrate(100); // Vibrate for 100 milliseconds
+  }
 
   if (turnO) {
     box.innerText = "O";
@@ -96,3 +104,22 @@ newGameBtn.addEventListener("click", resetGame);
 
 var sound = new Audio();
 sound.src = "sound2.mp3";
+
+const drawLine = (pattern) => {
+  const [a, b, c] = pattern;
+  const boxA = boxes[a].getBoundingClientRect();
+  const boxC = boxes[c].getBoundingClientRect();
+
+  const line = document.createElement("div");
+  line.classList.add("line");
+
+  const angle = Math.atan2(boxC.top - boxA.top, boxC.left - boxA.left) * 180 / Math.PI;
+  const length = Math.sqrt(Math.pow(boxC.top - boxA.top, 2) + Math.pow(boxC.left - boxA.left, 2));
+
+  line.style.width = `${length}px`;
+  line.style.transform = `rotate(${angle}deg)`;
+  line.style.top = `${boxA.top + boxA.height / 2}px`;
+  line.style.left = `${boxA.left + boxA.width / 2}px`;
+
+  document.body.appendChild(line);
+};

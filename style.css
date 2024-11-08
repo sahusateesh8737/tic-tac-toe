@@ -1,5 +1,5 @@
 * {
-    margin: 0;
+    margin: 100;
     padding: 0;
     box-sizing: border-box;
 }
@@ -90,4 +90,28 @@ background-color: rgb(255, 255, 255);
 }
 .hide{
     display: none;
+}
+
+/* Add this to your CSS file */
+.line {
+  position: absolute;
+  background-color: rgb(20, 2, 2);
+  height: 5px;
+  width: 120%;
+  transform-origin: left;
+  z-index: 1;
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-brand {
+    margin: 0;
 }
